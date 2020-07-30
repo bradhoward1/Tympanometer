@@ -5,7 +5,7 @@ from datetime import datetime
 from pymodm import connect, MongoModel, fields
 import PIL
 
-connect("mongodb+srv://brad_howard:@cluster0-lucsp.mongodb.net"
+connect("mongodb+srv://brad_howard:tympanometer123@cluster0-lucsp.mongodb.net"
         "/Tympanometer?retryWrites=true&w=majority")
 
 
@@ -47,4 +47,4 @@ def post_info():
 
 if __name__ == '__main__':
     __init__()
-    app.run()
+    app.run(host="vcm-15218.vm.duke.edu")
