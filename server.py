@@ -5,7 +5,7 @@ from datetime import datetime
 from pymodm import connect, MongoModel, fields
 import PIL
 
-connect("mongodb+srv://brad_howard:tympanometer123@cluster0-lucsp.mongodb.net"
+connect("mongodb+srv://brad_howard:saxman98@cluster0-lucsp.mongodb.net"
         "/Tympanometer?retryWrites=true&w=majority")
 
 
@@ -33,7 +33,7 @@ def add_data(in_dict):
         if key == "subject":
             new_info.subject = in_dict[key]
         elif key == "value":
-            new_info.values = in_dict[key]
+            new_info.values = [in_dict[key]]
     new_info.save()
     return True
 
@@ -47,4 +47,4 @@ def post_info():
 
 if __name__ == '__main__':
     __init__()
-    app.run(host="vcm-15218.vm.duke.edu")
+    app.run()
