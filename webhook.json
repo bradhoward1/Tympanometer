@@ -1,10 +1,10 @@
 { 
   "event": "SendToServer", 
-  "url": "https://vcm-15218.vm.duke.edu:5000/api/add_data",
+  "url": "https://vcm-15218.vm.duke.edu:5000/api/add_data", 
   "requestType": "POST", 
   "json": { 
-    "subject": "{{s}}",  
-    "value": "{{v}}",
+    "subject": "{{s}}", 
+    "value": "{{v}}" 
   },
   
   "mydevices": true 
