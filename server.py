@@ -38,6 +38,13 @@ def add_data(in_dict):
 	return True
 
 
+@app.route("/api/add_data", methods=["POST"])
+def post_info():
+	in_dict = request.get_json()
+	add_data(in_dict)
+	return "Good post made to server", 200
+
+
 if __name__ == '__main__':
     __init__()
     app.run()
