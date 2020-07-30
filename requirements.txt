@@ -1,0 +1,11 @@
+flask
+jsonify
+pytest
+pytest-pep8
+requests
+pymodm
+dnspython
+numpy
+matplotlib
+scipy
+pillow
