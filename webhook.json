@@ -3,20 +3,8 @@
   "url": "https://vcm-15218.vm.duke.edu:5000/api/add_data",
   "requestType": "POST", 
   "json": { 
-    "subject": "{{s}}", 
-    "unitofmeasure": "{{u}}", 
-    "measurename": "{{m}}", 
-    "value": "{{v}}", 
-    "organization": "{{o}}", 
-    "displayname": "{{d}}", 
-    "location": "{{l}}", 
-    "timecreated": "{{SPARK_PUBLISHED_AT}}", 
-    "guid": "{{SPARK_CORE_ID}}"
-  },
-
-  "azure_sas_token": { 
-    "key_name": "<YOUR_SAS_POLICY_NAME>", 
-    "key": "<YOUR_SAS_POLICY_KEY>" 
+    "subject": "{{s}}",  
+    "value": "{{v}}",
   },
   
   "mydevices": true 
