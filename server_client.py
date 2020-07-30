@@ -1,6 +1,8 @@
 import requests
 
+
 server_name = "http://127.0.0.1:5000"
+
 
 def data():
     data = {"subject": 12,
@@ -11,5 +13,3 @@ def data():
 
 if __name__ == '__main__':
     data()
-
-
