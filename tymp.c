@@ -41,6 +41,7 @@ void loop()
     Particle.publish("SendToServer", payload, PRIVATE);
   }
   count += 1;
+  delay(200);
 }
 
 int PumpOutput()
