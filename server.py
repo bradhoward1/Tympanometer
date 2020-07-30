@@ -26,6 +26,18 @@ def check_keys(in_dict):
 	return my_keys
 
 
+def add_data(in_dict):
+	new_info = SendData()
+	keys = check_keys(in_dict)
+	for key in keys:
+		if key == "subject":
+			new_info.subject = in_dict[key]
+		elif key == "value":
+			new_info.values = in_dict[key]
+	new_info.save()
+	return True
+
+
 if __name__ == '__main__':
     __init__()
     app.run()
