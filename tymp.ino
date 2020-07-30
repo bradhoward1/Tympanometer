@@ -4,6 +4,7 @@ int PumpPin = D2;
 int SpeakerButton = D4;
 int soundPin = A0;
 int count = 0;
+float server_info[10];
 const int sampleWindow = 50; // Sample window width in mS (50 mS = 20Hz)
 unsigned int sample;
 
@@ -27,7 +28,19 @@ void loop()
   }
 //  PumpOutput();
 //  SpeakerOutput(); 
-  micInput();
+  data = micInput();
+  server_info[count] = data;
+  if (count == 9){
+    count = 0;
+    char payload[255];
+    snprintf(payload, sizeof(payload),
+      "{\"s\":\"Values\",
+        \"v\": %f}",
+        server_info);
+    Serial.println(payload);
+    Particle.publish("SendToServer", payload, PRIVATE);
+  }
+  count += 1;
 }
 
 int PumpOutput()
@@ -59,7 +72,7 @@ int SpeakerOutput()
 
 int micInput() {
   unsigned long startMillis = millis(); // Start of sample window
-  unsigned int peakToPeak = 0;   // peak-to-peak level
+  unsigned float peakToPeak = 0;   // peak-to-peak level
   unsigned int signalMax = 0;
   unsigned int signalMin = 1024;
 
@@ -81,6 +94,7 @@ int micInput() {
   }
   peakToPeak = signalMax - signalMin;  // max - min = peak-peak amplitude
   double volts = (peakToPeak * 5.0) / 1024; // convert to volts
-  Particle.publish("Mic Reading", String(volts) + " V");
-  delay(1000);
+//  Particle.publish("Mic Reading", String(volts) + " V");
+//  delay(1000);
+  return peakToPeak;
 }
