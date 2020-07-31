@@ -32,6 +32,7 @@ def add_data(in_dict):
     for key in keys:
         if key == "subject":
             new_info.subject = in_dict[key]
+            new_info.save()
         elif key == "value_1":
             new_info.values = [in_dict[key]]
         elif key == "value_2":
@@ -78,7 +79,6 @@ def add_data(in_dict):
             new_info = SendData.objects.raw({"_id": "Values"})
             new_info.update({"$push": {"values":
                             in_dict[key]}})
-    new_info.save()
     return True
 
 
