@@ -28,20 +28,13 @@ void loop()
   }
 //  PumpOutput();
 //  SpeakerOutput(); 
-  data = micInput();
+  float data = micInput();
   server_info[count] = data;
-  if (count == 9){
-    count = 0;
-    char payload[255];
-    snprintf(payload, sizeof(payload),
-      "{\"s\":\"Values\",
-        \"v\": %f}",
-        server_info);
-    Serial.println(payload);
-    Particle.publish("SendToServer", payload, PRIVATE);
-  }
-  count += 1;
-  delay(200);
+  char payload[255];
+  snprintf(payload, sizeof(payload), "{\"s\":\"Values\", \"v\": %f}", "Values", data);
+  Serial.println(payload);
+  Particle.publish("SendToServer", payload, PRIVATE);
+  delay(1000);
 }
 
 int PumpOutput()
@@ -73,7 +66,7 @@ int SpeakerOutput()
 
 int micInput() {
   unsigned long startMillis = millis(); // Start of sample window
-  unsigned float peakToPeak = 0;   // peak-to-peak level
+  float peakToPeak = 0;   // peak-to-peak level
   unsigned int signalMax = 0;
   unsigned int signalMin = 1024;
 
