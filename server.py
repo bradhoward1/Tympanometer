@@ -35,36 +35,47 @@ def add_data(in_dict):
         elif key == "value_1":
             new_info.values = [in_dict[key]]
         elif key == "value_2":
+            new_info = SendData.objects.raw({"_id": "Values"})
             new_info.update({"push": {"values":
                             in_dict[key]}})
         elif key == "value_3":
+            new_info = SendData.objects.raw({"_id": "Values"})
             new_info.update({"push": {"values":
                             in_dict[key]}})
         elif key == "value_4":
+            new_info = SendData.objects.raw({"_id": "Values"})
             new_info.update({"push": {"values":
                             in_dict[key]}})
         elif key == "value_5":
+            new_info = SendData.objects.raw({"_id": "Values"})
             new_info.update({"push": {"values":
                             in_dict[key]}})
         elif key == "value_6":
+            new_info = SendData.objects.raw({"_id": "Values"})
             new_info.update({"push": {"values":
                             in_dict[key]}})
         elif key == "value_7":
+            new_info = SendData.objects.raw({"_id": "Values"})
             new_info.update({"push": {"values":
                             in_dict[key]}})
         elif key == "value_8":
+            new_info = SendData.objects.raw({"_id": "Values"})
             new_info.update({"push": {"values":
                             in_dict[key]}})
         elif key == "value_9":
+            new_info = SendData.objects.raw({"_id": "Values"})
             new_info.update({"push": {"values":
                             in_dict[key]}})
         elif key == "value_10":
+            new_info = SendData.objects.raw({"_id": "Values"})
             new_info.update({"push": {"values":
                             in_dict[key]}})
         elif key == "value_11":
+            new_info = SendData.objects.raw({"_id": "Values"})
             new_info.update({"push": {"values":
                             in_dict[key]}})
         elif key == "value_12":
+            new_info = SendData.objects.raw({"_id": "Values"})
             new_info.update({"push": {"values":
                             in_dict[key]}})
     new_info.save()
@@ -80,4 +91,4 @@ def post_info():
 
 if __name__ == '__main__':
     __init__()
-    app.run()
+    app.run(host="vcm-15218.vm.duke.edu")
