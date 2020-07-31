@@ -28,20 +28,43 @@ void loop()
   }
 //  PumpOutput();
 //  SpeakerOutput(); 
-  data = micInput();
+  float data = micInput();
   server_info[count] = data;
-  if (count == 9){
+  char payload[255];
+  if (count == 11){
+    snprintf(payload, sizeof(payload)
+            , "{ \"s\":\"Values\""
+              ", \"v\": %f"
+              ", \"v\": %f"
+              ", \"v\": %f"
+              ", \"v\": %f"
+              ", \"v\": %f"
+              ", \"v\": %f"
+              ", \"v\": %f"
+              ", \"v\": %f"
+              ", \"v\": %f"
+              ", \"v\": %f"
+              ", \"v\": %f"
+              ", \"v\": %f"
+              "}"
+            , "Values"
+            , server_info[0]
+            , server_info[1]
+            , server_info[2]
+            , server_info[3]
+            , server_info[4]
+            , server_info[5]
+            , server_info[6]
+            , server_info[7]
+            , server_info[8]
+            , server_info[9]
+            , server_info[10]
+            , server_info[11]);
     count = 0;
-    char payload[255];
-    snprintf(payload, sizeof(payload),
-      "{\"s\":\"Values\",
-        \"v\": %f}",
-        server_info);
     Serial.println(payload);
     Particle.publish("SendToServer", payload, PRIVATE);
+    delay(1000);
   }
-  count += 1;
-  delay(200);
 }
 
 int PumpOutput()
@@ -73,7 +96,7 @@ int SpeakerOutput()
 
 int micInput() {
   unsigned long startMillis = millis(); // Start of sample window
-  unsigned float peakToPeak = 0;   // peak-to-peak level
+  float peakToPeak = 0;   // peak-to-peak level
   unsigned int signalMax = 0;
   unsigned int signalMin = 1024;
 
