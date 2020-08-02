@@ -1,4 +1,4 @@
-iint SpeakerPin = D0;
+int SpeakerPin = D0;
 int PumpButton = D3;
 int PumpPin = D2;
 int SpeakerButton = D4;
