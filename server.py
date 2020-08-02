@@ -79,6 +79,18 @@ def add_data(in_dict):
             new_info = SendData.objects.raw({"_id": "Values"})
             new_info.update({"$push": {"values":
                             in_dict[key]}})
+        elif key == "value_13":
+            new_info = SendData.objects.raw({"_id": "Values"})
+            new_info.update({"$push": {"values":
+                            in_dict[key]}})
+        elif key == "value_14":
+            new_info = SendData.objects.raw({"_id": "Values"})
+            new_info.update({"$push": {"values":
+                            in_dict[key]}})
+        elif key == "value_15":
+            new_info = SendData.objects.raw({"_id": "Values"})
+            new_info.update({"$push": {"values":
+                            in_dict[key]}})
     return True
 
 
