@@ -4,14 +4,14 @@ int PumpPin = D2;
 int SpeakerButton = D4;
 int soundPin = A0;
 int count = 0;
-float server_info[10];
+double server_info[15];
 const int sampleWindow = 50; // Sample window width in mS (50 mS = 20Hz)
 unsigned int sample;
 
 void setup() {
   // set up Serial Monitor
   Serial.begin(115200);
-  delay(10000);
+  delay(5000);
   // set up pins
   pinMode(SpeakerButton, INPUT);
   pinMode(PumpPin, OUTPUT);
@@ -28,12 +28,16 @@ void loop()
   }
 //  PumpOutput();
 //  SpeakerOutput(); 
-  float data = micInput();
+  double data = micInput();
   server_info[count] = data;
-  char payload[255];
-  if (count == 11){
+//  Serial.println(count);
+  if (count == 14){
+    char payload[255];
     snprintf(payload, sizeof(payload)
             , "{ \"s\":\"Values\""
+              ", \"v\": %f"
+              ", \"v\": %f"
+              ", \"v\": %f"
               ", \"v\": %f"
               ", \"v\": %f"
               ", \"v\": %f"
@@ -59,11 +63,17 @@ void loop()
             , server_info[8]
             , server_info[9]
             , server_info[10]
-            , server_info[11]);
-    count = 0;
+            , server_info[11]
+            , server_info[12]
+            , server_info[13]
+            , server_info[14]
+            );
+    count = -1;
     Serial.println(payload);
     Particle.publish("SendToServer", payload, PRIVATE);
-    delay(1000);
+  }
+  else {
+      count += 1;
   }
 }
 
@@ -96,7 +106,7 @@ int SpeakerOutput()
 
 int micInput() {
   unsigned long startMillis = millis(); // Start of sample window
-  float peakToPeak = 0;   // peak-to-peak level
+  double peakToPeak = 0;   // peak-to-peak level
   unsigned int signalMax = 0;
   unsigned int signalMin = 1024;
 
