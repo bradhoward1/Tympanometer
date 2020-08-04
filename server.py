@@ -29,69 +29,85 @@ def check_keys(in_dict):
 def add_data(in_dict):
     new_info = SendData()
     keys = check_keys(in_dict)
-    for key in keys:
-        if key == "subject":
-            new_info.subject = in_dict[key]
-            new_info.save()
-        elif key == "value_1":
-            new_info.values = [in_dict[key]]
-        elif key == "value_2":
-            new_info = SendData.objects.raw({"_id": "Values"})
-            new_info.update({"$push": {"values":
-                            in_dict[key]}})
-        elif key == "value_3":
-            new_info = SendData.objects.raw({"_id": "Values"})
-            new_info.update({"$push": {"values":
-                            in_dict[key]}})
-        elif key == "value_4":
-            new_info = SendData.objects.raw({"_id": "Values"})
-            new_info.update({"$push": {"values":
-                            in_dict[key]}})
-        elif key == "value_5":
-            new_info = SendData.objects.raw({"_id": "Values"})
-            new_info.update({"$push": {"values":
-                            in_dict[key]}})
-        elif key == "value_6":
-            new_info = SendData.objects.raw({"_id": "Values"})
-            new_info.update({"$push": {"values":
-                            in_dict[key]}})
-        elif key == "value_7":
-            new_info = SendData.objects.raw({"_id": "Values"})
-            new_info.update({"$push": {"values":
-                            in_dict[key]}})
-        elif key == "value_8":
-            new_info = SendData.objects.raw({"_id": "Values"})
-            new_info.update({"$push": {"values":
-                            in_dict[key]}})
-        elif key == "value_9":
-            new_info = SendData.objects.raw({"_id": "Values"})
-            new_info.update({"$push": {"values":
-                            in_dict[key]}})
-        elif key == "value_10":
-            new_info = SendData.objects.raw({"_id": "Values"})
-            new_info.update({"$push": {"values":
-                            in_dict[key]}})
-        elif key == "value_11":
-            new_info = SendData.objects.raw({"_id": "Values"})
-            new_info.update({"$push": {"values":
-                            in_dict[key]}})
-        elif key == "value_12":
-            new_info = SendData.objects.raw({"_id": "Values"})
-            new_info.update({"$push": {"values":
-                            in_dict[key]}})
-        elif key == "value_13":
-            new_info = SendData.objects.raw({"_id": "Values"})
-            new_info.update({"$push": {"values":
-                            in_dict[key]}})
-        elif key == "value_14":
-            new_info = SendData.objects.raw({"_id": "Values"})
-            new_info.update({"$push": {"values":
-                            in_dict[key]}})
-        elif key == "value_15":
-            new_info = SendData.objects.raw({"_id": "Values"})
-            new_info.update({"$push": {"values":
-                            in_dict[key]}})
-    return True
+    # for key in keys:
+    #     if key == "subject":
+    #         new_info.subject = in_dict[key]
+    #         new_info.save()
+    #     elif key == "value_1":
+    #         new_info.values = [in_dict[key]]
+    #     elif key == "value_2":
+    #         new_info = SendData.objects.raw({"_id": "Values"})
+    #         new_info.update({"$push": {"values":
+    #                         in_dict[key]}})
+    #     elif key == "value_3":
+    #         new_info = SendData.objects.raw({"_id": "Values"})
+    #         new_info.update({"$push": {"values":
+    #                         in_dict[key]}})
+    #     elif key == "value_4":
+    #         new_info = SendData.objects.raw({"_id": "Values"})
+    #         new_info.update({"$push": {"values":
+    #                         in_dict[key]}})
+    #     elif key == "value_5":
+    #         new_info = SendData.objects.raw({"_id": "Values"})
+    #         new_info.update({"$push": {"values":
+    #                         in_dict[key]}})
+    #     elif key == "value_6":
+    #         new_info = SendData.objects.raw({"_id": "Values"})
+    #         new_info.update({"$push": {"values":
+    #                         in_dict[key]}})
+    #     elif key == "value_7":
+    #         new_info = SendData.objects.raw({"_id": "Values"})
+    #         new_info.update({"$push": {"values":
+    #                         in_dict[key]}})
+    #     elif key == "value_8":
+    #         new_info = SendData.objects.raw({"_id": "Values"})
+    #         new_info.update({"$push": {"values":
+    #                         in_dict[key]}})
+    #     elif key == "value_9":
+    #         new_info = SendData.objects.raw({"_id": "Values"})
+    #         new_info.update({"$push": {"values":
+    #                         in_dict[key]}})
+    #     elif key == "value_10":
+    #         new_info = SendData.objects.raw({"_id": "Values"})
+    #         new_info.update({"$push": {"values":
+    #                         in_dict[key]}})
+    #     elif key == "value_11":
+    #         new_info = SendData.objects.raw({"_id": "Values"})
+    #         new_info.update({"$push": {"values":
+    #                         in_dict[key]}})
+    #     elif key == "value_12":
+    #         new_info = SendData.objects.raw({"_id": "Values"})
+    #         new_info.update({"$push": {"values":
+    #                         in_dict[key]}})
+    #     elif key == "value_13":
+    #         new_info = SendData.objects.raw({"_id": "Values"})
+    #         new_info.update({"$push": {"values":
+    #                         in_dict[key]}})
+    #     elif key == "value_14":
+    #         new_info = SendData.objects.raw({"_id": "Values"})
+    #         new_info.update({"$push": {"values":
+    #                         in_dict[key]}})
+    #     elif key == "value_15":
+    #         new_info = SendData.objects.raw({"_id": "Values"})
+    #         new_info.update({"$push": {"values":
+    #                         in_dict[key]}})
+    # return True
+    try:
+        new_info = SendData.objects.raw({"_id": in_dict["subject"]})
+        add_vals(in_dict)
+    except:
+        new_info.subject = in_dict["subject"]
+        new_info.save()
+        add_new_vals(in_dict)
+
+
+
+def add_vals(in_dict):
+    pass
+
+
+def add_new_vals(in_dict):
+    pass
 
 
 @app.route("/api/add_data", methods=["POST"])
