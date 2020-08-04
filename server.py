@@ -5,7 +5,7 @@ from datetime import datetime
 from pymodm import connect, MongoModel, fields, errors
 import PIL
 
-connect("mongodb+srv://brad_howard:NA@cluster0-lucsp.mongodb.net"
+connect("mongodb+srv://brad_howard:<password>@cluster0-lucsp.mongodb.net"
         "/Tympanometer?retryWrites=true&w=majority")
 
 
