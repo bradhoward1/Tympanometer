@@ -58,6 +58,7 @@ def add_vals(in_dict):
     new_info.update({"$push": {"values": in_dict["value_14"]}})
     new_info.update({"$push": {"values": in_dict["value_15"]}})
 
+
 def add_new_vals(in_dict):
     new_info = SendData()
     new_info.subject = in_dict["subject"]
