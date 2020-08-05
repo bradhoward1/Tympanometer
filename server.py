@@ -95,6 +95,16 @@ def patient_info(patient_id):
     return patient_mic_list
 
 
+@app.route("/api/get_mic_data", methods=["GET"])
+def get_patient_info(patient_id):
+    values = patient_info(patient_id)
+    contents = {"values": values}
+    if contents:
+        return jsonify(contents), 200
+    else:
+        return "Unable to retrieve list of recorded mic values", 400
+
+
 if __name__ == '__main__':
     __init__()
     app.run()
