@@ -89,18 +89,21 @@ def post_info():
     return "Good post made to server", 200
 
 
-def patient_info(patient_id):
-    patient_id = SendData.objects.raw({"_id": patient_id}).first()
+def patient_info(in_dict):
+#    in_dict is going to look like this: {"name": "Name_Needed_For_ID"}
+    patient_id = in_dict["ID"]
+    patient = SendData.objects.raw({"_id": patient_id}).first()
+    print(patient.subject)
     patient_mic_list = patient.values
     return patient_mic_list
 
 
-@app.route("/api/get_mic_data", methods=["GET"])
-def get_patient_info(patient_id):
-    values = patient_info(patient_id)
-    contents = {"values": values}
-    if contents:
-        return jsonify(contents), 200
+@app.route("/api/get_mic_data", methods=["POST"])
+def get_patient_info():
+    in_dict = request.get_json()
+    values = patient_info(in_dict)
+    if values:
+        return jsonify(values), 200
     else:
         return "Unable to retrieve list of recorded mic values", 400
 

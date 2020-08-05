@@ -1,0 +1,10 @@
+{ 
+  "event": "GetMicData", 
+  "url": "http://vcm-15218.vm.duke.edu:5000/api/get_mic_data", 
+  "requestType": "POST",
+  "json": { 
+    "ID": "{{s}}"
+  },
+
+  "mydevices": true 
+}
