@@ -4,6 +4,7 @@ from flask import Flask, request, jsonify
 from datetime import datetime
 from pymodm import connect, MongoModel, fields, errors
 import PIL
+import matplotlib.pyplot as plt
 
 connect("mongodb+srv://<username>:<password>@cluster0-lucsp.mongodb.net"
         "/Tympanometer?retryWrites=true&w=majority")
@@ -86,6 +87,12 @@ def post_info():
     in_dict = request.get_json()
     add_data(in_dict)
     return "Good post made to server", 200
+
+
+def patient_info(patient_id):
+    patient_id = SendData.objects.raw({"_id": patient_id}).first()
+    patient_mic_list = patient.values
+    return patient_mic_list
 
 
 if __name__ == '__main__':
