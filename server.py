@@ -2,10 +2,10 @@
 
 from flask import Flask, request, jsonify
 from datetime import datetime
-from pymodm import connect, MongoModel, fields
+from pymodm import connect, MongoModel, fields, errors
 import PIL
 
-connect("mongodb+srv://brad_howard:saxman98@cluster0-lucsp.mongodb.net"
+connect("mongodb+srv://<username>:<password>@cluster0-lucsp.mongodb.net"
         "/Tympanometer?retryWrites=true&w=majority")
 
 
@@ -29,69 +29,56 @@ def check_keys(in_dict):
 def add_data(in_dict):
     new_info = SendData()
     keys = check_keys(in_dict)
-    for key in keys:
-        if key == "subject":
-            new_info.subject = in_dict[key]
-            new_info.save()
-        elif key == "value_1":
-            new_info.values = [in_dict[key]]
-        elif key == "value_2":
-            new_info = SendData.objects.raw({"_id": "Values"})
-            new_info.update({"$push": {"values":
-                            in_dict[key]}})
-        elif key == "value_3":
-            new_info = SendData.objects.raw({"_id": "Values"})
-            new_info.update({"$push": {"values":
-                            in_dict[key]}})
-        elif key == "value_4":
-            new_info = SendData.objects.raw({"_id": "Values"})
-            new_info.update({"$push": {"values":
-                            in_dict[key]}})
-        elif key == "value_5":
-            new_info = SendData.objects.raw({"_id": "Values"})
-            new_info.update({"$push": {"values":
-                            in_dict[key]}})
-        elif key == "value_6":
-            new_info = SendData.objects.raw({"_id": "Values"})
-            new_info.update({"$push": {"values":
-                            in_dict[key]}})
-        elif key == "value_7":
-            new_info = SendData.objects.raw({"_id": "Values"})
-            new_info.update({"$push": {"values":
-                            in_dict[key]}})
-        elif key == "value_8":
-            new_info = SendData.objects.raw({"_id": "Values"})
-            new_info.update({"$push": {"values":
-                            in_dict[key]}})
-        elif key == "value_9":
-            new_info = SendData.objects.raw({"_id": "Values"})
-            new_info.update({"$push": {"values":
-                            in_dict[key]}})
-        elif key == "value_10":
-            new_info = SendData.objects.raw({"_id": "Values"})
-            new_info.update({"$push": {"values":
-                            in_dict[key]}})
-        elif key == "value_11":
-            new_info = SendData.objects.raw({"_id": "Values"})
-            new_info.update({"$push": {"values":
-                            in_dict[key]}})
-        elif key == "value_12":
-            new_info = SendData.objects.raw({"_id": "Values"})
-            new_info.update({"$push": {"values":
-                            in_dict[key]}})
-        elif key == "value_13":
-            new_info = SendData.objects.raw({"_id": "Values"})
-            new_info.update({"$push": {"values":
-                            in_dict[key]}})
-        elif key == "value_14":
-            new_info = SendData.objects.raw({"_id": "Values"})
-            new_info.update({"$push": {"values":
-                            in_dict[key]}})
-        elif key == "value_15":
-            new_info = SendData.objects.raw({"_id": "Values"})
-            new_info.update({"$push": {"values":
-                            in_dict[key]}})
+    try:
+        presence_check = SendData.objects.get({"_id": in_dict["subject"]})
+    except SendData.DoesNotExist:
+        presence_check = False
+    if presence_check is False:
+        add_new_vals(in_dict)
+    else:
+        add_vals(in_dict)
     return True
+
+
+def add_vals(in_dict):
+    new_info = SendData.objects.raw({"_id": in_dict["subject"]})
+    new_info.update({"$push": {"values": in_dict["value_1"]}})
+    new_info.update({"$push": {"values": in_dict["value_2"]}})
+    new_info.update({"$push": {"values": in_dict["value_3"]}})
+    new_info.update({"$push": {"values": in_dict["value_4"]}})
+    new_info.update({"$push": {"values": in_dict["value_5"]}})
+    new_info.update({"$push": {"values": in_dict["value_6"]}})
+    new_info.update({"$push": {"values": in_dict["value_7"]}})
+    new_info.update({"$push": {"values": in_dict["value_8"]}})
+    new_info.update({"$push": {"values": in_dict["value_9"]}})
+    new_info.update({"$push": {"values": in_dict["value_10"]}})
+    new_info.update({"$push": {"values": in_dict["value_11"]}})
+    new_info.update({"$push": {"values": in_dict["value_12"]}})
+    new_info.update({"$push": {"values": in_dict["value_13"]}})
+    new_info.update({"$push": {"values": in_dict["value_14"]}})
+    new_info.update({"$push": {"values": in_dict["value_15"]}})
+
+
+def add_new_vals(in_dict):
+    new_info = SendData()
+    new_info.subject = in_dict["subject"]
+    new_info.values = [in_dict["value_1"]]
+    new_info.save()
+    new_info = SendData.objects.raw({"_id": in_dict["subject"]})
+    new_info.update({"$push": {"values": in_dict["value_2"]}})
+    new_info.update({"$push": {"values": in_dict["value_3"]}})
+    new_info.update({"$push": {"values": in_dict["value_4"]}})
+    new_info.update({"$push": {"values": in_dict["value_5"]}})
+    new_info.update({"$push": {"values": in_dict["value_6"]}})
+    new_info.update({"$push": {"values": in_dict["value_7"]}})
+    new_info.update({"$push": {"values": in_dict["value_8"]}})
+    new_info.update({"$push": {"values": in_dict["value_9"]}})
+    new_info.update({"$push": {"values": in_dict["value_10"]}})
+    new_info.update({"$push": {"values": in_dict["value_11"]}})
+    new_info.update({"$push": {"values": in_dict["value_12"]}})
+    new_info.update({"$push": {"values": in_dict["value_13"]}})
+    new_info.update({"$push": {"values": in_dict["value_14"]}})
+    new_info.update({"$push": {"values": in_dict["value_15"]}})
 
 
 @app.route("/api/add_data", methods=["POST"])
@@ -103,4 +90,4 @@ def post_info():
 
 if __name__ == '__main__':
     __init__()
-    app.run(host="vcm-15218.vm.duke.edu")
+    app.run()
