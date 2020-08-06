@@ -6,7 +6,7 @@ from pymodm import connect, MongoModel, fields, errors
 import PIL
 import matplotlib.pyplot as plt
 
-connect("mongodb+srv://<username>:<password>@cluster0-lucsp.mongodb.net"
+connect("mongodb+srv://brad_howard:saxman98@cluster0-lucsp.mongodb.net"
         "/Tympanometer?retryWrites=true&w=majority")
 
 
@@ -91,7 +91,12 @@ def post_info():
 
 def patient_info(in_dict):
     # in_dict is going to look like this: {"name": "Name_Needed_For_ID"}
-    patient_id = in_dict["ID"]
+    patient_id = in_dict["data"].split("\"")
+    patient_id = patient_id[2]
+    patient_id = patient_id.replace(" ", "")
+    patient_id = patient_id.replace("}", "")
+    patient_id = patient_id.replace(":", "")
+    print(patient_id)
     patient = SendData.objects.raw({"_id": patient_id}).first()
     print(patient.subject)
     patient_mic_list = patient.values
