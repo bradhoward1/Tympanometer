@@ -96,7 +96,9 @@ def patient_info(in_dict):
     patient_id = patient_id.replace(" ", "")
     patient_id = patient_id.replace("}", "")
     patient_id = patient_id.replace(":", "")
-    print(patient_id)
+    patient = SendData.objects.raw({"_id": patient_id}).first()
+    patient_mic_list = patient.values
+    return patient_mic_list
 
 
 @app.route("/api/get_mic_data", methods=["POST"])
@@ -104,6 +106,7 @@ def get_patient_info():
     in_dict = request.get_json()
     values = patient_info(in_dict)
     if values:
+        print(values)
         return jsonify(values), 200
     else:
         return "Unable to retrieve list of recorded mic values", 400
