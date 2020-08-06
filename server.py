@@ -6,7 +6,7 @@ from pymodm import connect, MongoModel, fields, errors
 import PIL
 import matplotlib.pyplot as plt
 
-connect("mongodb+srv://brad_howard:saxman98@cluster0-lucsp.mongodb.net"
+connect("mongodb+srv://<username>:<password>@cluster0-lucsp.mongodb.net"
         "/Tympanometer?retryWrites=true&w=majority")
 
 
