@@ -91,11 +91,12 @@ def post_info():
 
 def patient_info(in_dict):
     # in_dict is going to look like this: {"name": "Name_Needed_For_ID"}
-    patient_id = in_dict["ID"]
-    patient = SendData.objects.raw({"_id": patient_id}).first()
-    print(patient.subject)
-    patient_mic_list = patient.values
-    return patient_mic_list
+    patient_id = in_dict["data"].split("\"")
+    patient_id = patient_id[2]
+    patient_id = patient_id.replace(" ", "")
+    patient_id = patient_id.replace("}", "")
+    patient_id = patient_id.replace(":", "")
+    print(patient_id)
 
 
 @app.route("/api/get_mic_data", methods=["POST"])
