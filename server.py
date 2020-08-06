@@ -90,7 +90,7 @@ def post_info():
 
 
 def patient_info(in_dict):
-#    in_dict is going to look like this: {"name": "Name_Needed_For_ID"}
+    # in_dict is going to look like this: {"name": "Name_Needed_For_ID"}
     patient_id = in_dict["ID"]
     patient = SendData.objects.raw({"_id": patient_id}).first()
     print(patient.subject)
