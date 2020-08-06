@@ -4,6 +4,7 @@ int PumpPin = D2;
 int SpeakerButton = D4;
 int soundPin = A0;
 int count = 0;
+int overall_count = 0;
 double server_info[15];
 const int sampleWindow = 50; // Sample window width in mS (50 mS = 20Hz)
 unsigned int sample;
@@ -75,7 +76,18 @@ void loop()
   else {
       count += 1;
   }
+  overall_count += 1;
+  if (overall_count >= 2000) {
+    get_mic_info("Values")
+    int stopper_variable = 1;
+    while (stopper_variable == 1) {
+      delay(100);
+      
+    }
+
+  } 
 }
+
 
 int PumpOutput()
 {
@@ -91,6 +103,7 @@ int PumpOutput()
   }
 }
 
+
 int SpeakerOutput()
 {
   int buttonState = digitalRead(SpeakerButton);
@@ -103,6 +116,7 @@ int SpeakerOutput()
     noTone(SpeakerPin);
   }
 }
+
 
 int micInput() {
   unsigned long startMillis = millis(); // Start of sample window
@@ -131,4 +145,16 @@ int micInput() {
 //  Particle.publish("Mic Reading", String(volts) + " V");
 //  delay(1000);
   return peakToPeak;
+}
+
+
+int get_mic_info(String input_string) {
+  char payload[255];
+  snprintf(payload, sizeof(payload)
+          , "{ \"s\": %s"
+            "}"
+          , input_string
+          );
+  Serial.println(payload);
+  Particle.publish("GetMicData", payload, PRIVATE);
 }
