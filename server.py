@@ -4,6 +4,7 @@ from flask import Flask, request, jsonify
 from datetime import datetime
 from pymodm import connect, MongoModel, fields, errors
 import PIL
+import matplotlib.pyplot as plt
 
 connect("mongodb+srv://<username>:<password>@cluster0-lucsp.mongodb.net"
         "/Tympanometer?retryWrites=true&w=majority")
@@ -86,6 +87,25 @@ def post_info():
     in_dict = request.get_json()
     add_data(in_dict)
     return "Good post made to server", 200
+
+
+def patient_info(in_dict):
+#    in_dict is going to look like this: {"name": "Name_Needed_For_ID"}
+    patient_id = in_dict["ID"]
+    patient = SendData.objects.raw({"_id": patient_id}).first()
+    print(patient.subject)
+    patient_mic_list = patient.values
+    return patient_mic_list
+
+
+@app.route("/api/get_mic_data", methods=["POST"])
+def get_patient_info():
+    in_dict = request.get_json()
+    values = patient_info(in_dict)
+    if values:
+        return jsonify(values), 200
+    else:
+        return "Unable to retrieve list of recorded mic values", 400
 
 
 if __name__ == '__main__':
