@@ -3,11 +3,14 @@ int PumpButton = D3;
 int PumpPin = D2;
 int SpeakerButton = D4;
 int soundPin = A0;
+int PressurePin = A1;
 int count = 0;
 int overall_count = 0;
 double server_info[15];
+double pressure_info[15];
 const int sampleWindow = 50; // Sample window width in mS (50 mS = 20Hz)
 unsigned int sample;
+unsigned int PressureSample;
 
 void setup() {
   // set up Serial Monitor
@@ -19,6 +22,7 @@ void setup() {
   pinMode(SpeakerPin, OUTPUT);
   pinMode(PumpButton, INPUT);
   pinMode(soundPin, INPUT);
+  pinMode(PressurePin, INPUT);
 }
 
 
@@ -30,7 +34,9 @@ void loop()
 //  PumpOutput();
 //  SpeakerOutput(); 
   double data = micInput();
+  double P_data = PressureInput();
   server_info[count] = data;
+  pressure_info[count] = P_data;
 //  Serial.println(count);
   if (count == 14){
     char payload[255];
@@ -78,7 +84,7 @@ void loop()
   }
   overall_count += 1;
   if (overall_count >= 2000) {
-    get_mic_info("Values")
+    get_mic_info("Values");
     int stopper_variable = 1;
     while (stopper_variable == 1) {
       delay(100);
@@ -158,3 +164,9 @@ int get_mic_info(String input_string) {
   Serial.println(payload);
   Particle.publish("GetMicData", payload, PRIVATE);
 }
+
+
+int PressureInput() {
+  PressureSample = analogRead(PressurePin);
+}
+
