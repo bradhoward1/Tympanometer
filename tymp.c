@@ -58,7 +58,7 @@ void loop()
               ", \"v\": %f"
               ", \"v\": %f"
               "}"
-            , "Values"
+            // , "Values"
             , server_info[0]
             , server_info[1]
             , server_info[2]
@@ -75,9 +75,47 @@ void loop()
             , server_info[13]
             , server_info[14]
             );
-    count = -1;
     Serial.println(payload);
     Particle.publish("SendToServer", payload, PRIVATE);
+    char payload_pressure[255];
+    snprintf(payload_pressure, sizeof(payload_pressure)
+            , "{ \"s\":\"Values\""
+              ", \"v\": %f"
+              ", \"v\": %f"
+              ", \"v\": %f"
+              ", \"v\": %f"
+              ", \"v\": %f"
+              ", \"v\": %f"
+              ", \"v\": %f"
+              ", \"v\": %f"
+              ", \"v\": %f"
+              ", \"v\": %f"
+              ", \"v\": %f"
+              ", \"v\": %f"
+              ", \"v\": %f"
+              ", \"v\": %f"
+              ", \"v\": %f"
+              "}"
+            // , "Values"
+            , pressure_info[0]
+            , pressure_info[1]
+            , pressure_info[2]
+            , pressure_info[3]
+            , pressure_info[4]
+            , pressure_info[5]
+            , pressure_info[6]
+            , pressure_info[7]
+            , pressure_info[8]
+            , pressure_info[9]
+            , pressure_info[10]
+            , pressure_info[11]
+            , pressure_info[12]
+            , pressure_info[13]
+            , pressure_info[14]
+            );
+    Serial.println(payload_pressure);
+    Particle.publish("SendPressure", payload_pressure, PRIVATE);
+    count = -1;
   }
   else {
       count += 1;
