@@ -1,0 +1,25 @@
+{ 
+  "event": "SendPressure", 
+  "url": "http://vcm-15218.vm.duke.edu:5000/api/add_pressure", 
+  "requestType": "POST", 
+  "json": { 
+    "subject": "{{s}}", 
+    "value_1": "{{v}}",
+    "value_2": "{{v}}",
+    "value_3": "{{v}}",
+    "value_4": "{{v}}",
+    "value_5": "{{v}}",
+    "value_6": "{{v}}",
+    "value_7": "{{v}}",
+    "value_8": "{{v}}",
+    "value_9": "{{v}}",
+    "value_10": "{{v}}",
+    "value_11": "{{v}}",
+    "value_12": "{{v}}",
+    "value_13": "{{v}}",
+    "value_14": "{{v}}",
+    "value_15": "{{v}}"
+  },
+  
+  "mydevices": true 
+}
