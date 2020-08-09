@@ -206,5 +206,5 @@ int get_mic_info(String input_string) {
 
 int PressureInput() {
   PressureSample = analogRead(PressurePin);
+  return PressureSample;
 }
-
