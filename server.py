@@ -5,6 +5,7 @@ from datetime import datetime
 from pymodm import connect, MongoModel, fields, errors
 import PIL
 import matplotlib.pyplot as plt
+import csv
 
 connect("mongodb+srv://<username>:<password>@cluster0-lucsp.mongodb.net"
         "/Tympanometer?retryWrites=true&w=majority")
@@ -97,18 +98,30 @@ def patient_info(in_dict):
     patient_id = patient_id.replace(":", "")
     patient = SendData.objects.raw({"_id": patient_id}).first()
     patient_mic_list = patient.values
-    return patient_mic_list
+    patient_pressure_list = patient.pressure_values
+    return patient_mic_list, patient_pressure_list
 
 
 @app.route("/api/get_mic_data", methods=["POST"])
 def get_patient_info():
     in_dict = request.get_json()
-    values = patient_info(in_dict)
+    values, p_values = patient_info(in_dict)
     if values:
-        print(values)
+        create_csv(values, p_values)
         return jsonify(values), 200
     else:
         return "Unable to retrieve list of recorded mic values", 400
+
+
+def create_csv(values, p_values):
+    fields = ["Mic_Values", "Pressure_Values"]
+    filename = "patient_info.csv"
+    # writing to csv file  
+    with open(filename, 'w') as csvfile:
+        csvwriter = csv.writer(csvfile)
+        csvwriter.writerow(fields)
+        for value, p_value in zip(values, p_values):
+            csv.writer.writerow(value, p_value)
 
 
 def add_pressure_data(in_dict):
