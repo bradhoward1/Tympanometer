@@ -116,12 +116,13 @@ def get_patient_info():
 def create_csv(values, p_values):
     fields = ["Mic_Values", "Pressure_Values"]
     filename = "patient_info.csv"
-    # writing to csv file  
+    # writing to csv file
     with open(filename, 'w') as csvfile:
         csvwriter = csv.writer(csvfile)
         csvwriter.writerow(fields)
         for value, p_value in zip(values, p_values):
-            csv.writer.writerow(value, p_value)
+            my_string = [str(value), str(p_value)]
+            csvwriter.writerow(my_string)
 
 
 def add_pressure_data(in_dict):
