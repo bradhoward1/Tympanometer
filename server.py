@@ -5,6 +5,7 @@ from datetime import datetime
 from pymodm import connect, MongoModel, fields, errors
 import PIL
 import matplotlib.pyplot as plt
+import csv
 
 connect("mongodb+srv://<username>:<password>@cluster0-lucsp.mongodb.net"
         "/Tympanometer?retryWrites=true&w=majority")
@@ -51,20 +52,20 @@ def add_vals(in_dict):
     new_info.update({"$push": {"values": in_dict["value_5"]}})
     new_info.update({"$push": {"values": in_dict["value_6"]}})
     new_info.update({"$push": {"values": in_dict["value_7"]}})
-    new_info.update({"$push": {"values": in_dict["value_8"]}})
-    new_info.update({"$push": {"values": in_dict["value_9"]}})
-    new_info.update({"$push": {"values": in_dict["value_10"]}})
-    new_info.update({"$push": {"values": in_dict["value_11"]}})
-    new_info.update({"$push": {"values": in_dict["value_12"]}})
-    new_info.update({"$push": {"values": in_dict["value_13"]}})
-    new_info.update({"$push": {"values": in_dict["value_14"]}})
-    new_info.update({"$push": {"values": in_dict["value_15"]}})
+    new_info.update({"$push": {"pressure_values": in_dict["value_8"]}})
+    new_info.update({"$push": {"pressure_values": in_dict["value_9"]}})
+    new_info.update({"$push": {"pressure_values": in_dict["value_10"]}})
+    new_info.update({"$push": {"pressure_values": in_dict["value_11"]}})
+    new_info.update({"$push": {"pressure_values": in_dict["value_12"]}})
+    new_info.update({"$push": {"pressure_values": in_dict["value_13"]}})
+    new_info.update({"$push": {"pressure_values": in_dict["value_14"]}})
 
 
 def add_new_vals(in_dict):
     new_info = SendData()
     new_info.subject = in_dict["subject"]
     new_info.values = [in_dict["value_1"]]
+    new_info.pressure_values = [in_dict["value_8"]]
     new_info.save()
     new_info = SendData.objects.raw({"_id": in_dict["subject"]})
     new_info.update({"$push": {"values": in_dict["value_2"]}})
@@ -73,14 +74,12 @@ def add_new_vals(in_dict):
     new_info.update({"$push": {"values": in_dict["value_5"]}})
     new_info.update({"$push": {"values": in_dict["value_6"]}})
     new_info.update({"$push": {"values": in_dict["value_7"]}})
-    new_info.update({"$push": {"values": in_dict["value_8"]}})
-    new_info.update({"$push": {"values": in_dict["value_9"]}})
-    new_info.update({"$push": {"values": in_dict["value_10"]}})
-    new_info.update({"$push": {"values": in_dict["value_11"]}})
-    new_info.update({"$push": {"values": in_dict["value_12"]}})
-    new_info.update({"$push": {"values": in_dict["value_13"]}})
-    new_info.update({"$push": {"values": in_dict["value_14"]}})
-    new_info.update({"$push": {"values": in_dict["value_15"]}})
+    new_info.update({"$push": {"pressure_values": in_dict["value_9"]}})
+    new_info.update({"$push": {"pressure_values": in_dict["value_10"]}})
+    new_info.update({"$push": {"pressure_values": in_dict["value_11"]}})
+    new_info.update({"$push": {"pressure_values": in_dict["value_12"]}})
+    new_info.update({"$push": {"pressure_values": in_dict["value_13"]}})
+    new_info.update({"$push": {"pressure_values": in_dict["value_14"]}})
 
 
 @app.route("/api/add_data", methods=["POST"])
@@ -99,18 +98,30 @@ def patient_info(in_dict):
     patient_id = patient_id.replace(":", "")
     patient = SendData.objects.raw({"_id": patient_id}).first()
     patient_mic_list = patient.values
-    return patient_mic_list
+    patient_pressure_list = patient.pressure_values
+    return patient_mic_list, patient_pressure_list
 
 
 @app.route("/api/get_mic_data", methods=["POST"])
 def get_patient_info():
     in_dict = request.get_json()
-    values = patient_info(in_dict)
+    values, p_values = patient_info(in_dict)
     if values:
-        print(values)
+        create_csv(values, p_values)
         return jsonify(values), 200
     else:
         return "Unable to retrieve list of recorded mic values", 400
+
+
+def create_csv(values, p_values):
+    fields = ["Mic_Values", "Pressure_Values"]
+    filename = "patient_info.csv"
+    # writing to csv file  
+    with open(filename, 'w') as csvfile:
+        csvwriter = csv.writer(csvfile)
+        csvwriter.writerow(fields)
+        for value, p_value in zip(values, p_values):
+            csv.writer.writerow(value, p_value)
 
 
 def add_pressure_data(in_dict):
