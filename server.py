@@ -171,7 +171,7 @@ def add_new_pressure_vals(in_dict):
 @app.route("/api/add_pressure", methods=["POST"])
 def post_info():
     in_dict = request.get_json()
-    add_data(in_dict)
+    add_pressure_data(in_dict)
     return "Good post made to server", 200
 
 
