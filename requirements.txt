@@ -9,3 +9,5 @@ numpy
 matplotlib
 scipy
 pillow
+Flask-Mail
+pep8

@@ -6,12 +6,24 @@ from pymodm import connect, MongoModel, fields, errors
 import PIL
 import matplotlib.pyplot as plt
 import csv
+from flask_mail import Mail, Message
+import requests
 
 connect("mongodb+srv://<username>:<password>@cluster0-lucsp.mongodb.net"
         "/Tympanometer?retryWrites=true&w=majority")
 
 
 app = Flask(__name__)
+app.config.update(
+    DEBUG=True,
+    # EMAIL SETTINGS
+    MAIL_SERVER='smtp.gmail.com',
+    MAIL_PORT=465,
+    MAIL_USE_SSL=True,
+    MAIL_USERNAME='your@gmail.com',
+    MAIL_PASSWORD='yourpassword'
+    )
+mail = Mail(app)
 
 
 class SendData(MongoModel):
@@ -125,66 +137,89 @@ def create_csv(values, p_values):
             csvwriter.writerow(my_string)
 
 
-def add_pressure_data(in_dict):
-    new_info = SendData()
-    keys = check_keys(in_dict)
+def create_email(in_dict):
+    txt = "{} Data"
     try:
-        presence_check = SendData.objects.get({"_id": in_dict["subject"]})
-    except SendData.DoesNotExist:
-        presence_check = False
-    if presence_check is False:
-        add_new_pressure_vals(in_dict)
-    else:
-        add_pressure_vals(in_dict)
-    return True
+        msg = Message(txt.format(in_dict["subject"])
+                      sender="yoursendingemail@gmail.com",
+                      recipients=["recievingemail@email.com"])
+        msg.body = "Attached below are the"
+        " results for {}.".format(in_dict["subject"])
+        with app.open_resource("patient_info.csv") as fp:
+            msg.attach("patient_info.csv", "patient_info/csv", fp.read())
+        mail.send(msg)
+        return 'Mail sent!'
+    except Exception, e:
+        return(str(e))
 
 
-def add_pressure_vals(in_dict):
-    new_info = SendData.objects.raw({"_id": in_dict["subject"]})
-    new_info.update({"$push": {"pressure_values": in_dict["value_1"]}})
-    new_info.update({"$push": {"pressure_values": in_dict["value_2"]}})
-    new_info.update({"$push": {"pressure_values": in_dict["value_3"]}})
-    new_info.update({"$push": {"pressure_values": in_dict["value_4"]}})
-    new_info.update({"$push": {"pressure_values": in_dict["value_5"]}})
-    new_info.update({"$push": {"pressure_values": in_dict["value_6"]}})
-    new_info.update({"$push": {"pressure_values": in_dict["value_7"]}})
-    new_info.update({"$push": {"pressure_values": in_dict["value_8"]}})
-    new_info.update({"$push": {"pressure_values": in_dict["value_9"]}})
-    new_info.update({"$push": {"pressure_values": in_dict["value_10"]}})
-    new_info.update({"$push": {"pressure_values": in_dict["value_11"]}})
-    new_info.update({"$push": {"pressure_values": in_dict["value_12"]}})
-    new_info.update({"$push": {"pressure_values": in_dict["value_13"]}})
-    new_info.update({"$push": {"pressure_values": in_dict["value_14"]}})
-    new_info.update({"$push": {"pressure_values": in_dict["value_15"]}})
-
-
-def add_new_pressure_vals(in_dict):
-    new_info = SendData()
-    new_info.subject = in_dict["subject"]
-    new_info.pressure_values = [in_dict["value_1"]]
-    new_info.save()
-    new_info = SendData.objects.raw({"_id": in_dict["subject"]})
-    new_info.update({"$push": {"pressure_values": in_dict["value_2"]}})
-    new_info.update({"$push": {"pressure_values": in_dict["value_3"]}})
-    new_info.update({"$push": {"pressure_values": in_dict["value_4"]}})
-    new_info.update({"$push": {"pressure_values": in_dict["value_5"]}})
-    new_info.update({"$push": {"pressure_values": in_dict["value_6"]}})
-    new_info.update({"$push": {"pressure_values": in_dict["value_7"]}})
-    new_info.update({"$push": {"pressure_values": in_dict["value_8"]}})
-    new_info.update({"$push": {"pressure_values": in_dict["value_9"]}})
-    new_info.update({"$push": {"pressure_values": in_dict["value_10"]}})
-    new_info.update({"$push": {"pressure_values": in_dict["value_11"]}})
-    new_info.update({"$push": {"pressure_values": in_dict["value_12"]}})
-    new_info.update({"$push": {"pressure_values": in_dict["value_13"]}})
-    new_info.update({"$push": {"pressure_values": in_dict["value_14"]}})
-    new_info.update({"$push": {"pressure_values": in_dict["value_15"]}})
-
-
-@app.route("/api/add_pressure", methods=["POST"])
-def post_pressure_info():
+@app.route("/api/send_email", methods=["POST"])
+def send_email():
     in_dict = request.get_json()
-    add_pressure_data(in_dict)
-    return "Good post made to server", 200
+    return_message = create_email(in_dict)
+    return jsonify(return_message), 200
+
+
+# def add_pressure_data(in_dict):
+#     new_info = SendData()
+#     keys = check_keys(in_dict)
+#     try:
+#         presence_check = SendData.objects.get({"_id": in_dict["subject"]})
+#     except SendData.DoesNotExist:
+#         presence_check = False
+#     if presence_check is False:
+#         add_new_pressure_vals(in_dict)
+#     else:
+#         add_pressure_vals(in_dict)
+#     return True
+#
+#
+# def add_pressure_vals(in_dict):
+#     new_info = SendData.objects.raw({"_id": in_dict["subject"]})
+#     new_info.update({"$push": {"pressure_values": in_dict["value_1"]}})
+#     new_info.update({"$push": {"pressure_values": in_dict["value_2"]}})
+#     new_info.update({"$push": {"pressure_values": in_dict["value_3"]}})
+#     new_info.update({"$push": {"pressure_values": in_dict["value_4"]}})
+#     new_info.update({"$push": {"pressure_values": in_dict["value_5"]}})
+#     new_info.update({"$push": {"pressure_values": in_dict["value_6"]}})
+#     new_info.update({"$push": {"pressure_values": in_dict["value_7"]}})
+#     new_info.update({"$push": {"pressure_values": in_dict["value_8"]}})
+#     new_info.update({"$push": {"pressure_values": in_dict["value_9"]}})
+#     new_info.update({"$push": {"pressure_values": in_dict["value_10"]}})
+#     new_info.update({"$push": {"pressure_values": in_dict["value_11"]}})
+#     new_info.update({"$push": {"pressure_values": in_dict["value_12"]}})
+#     new_info.update({"$push": {"pressure_values": in_dict["value_13"]}})
+#     new_info.update({"$push": {"pressure_values": in_dict["value_14"]}})
+#     new_info.update({"$push": {"pressure_values": in_dict["value_15"]}})
+
+
+# def add_new_pressure_vals(in_dict):
+#     new_info = SendData()
+#     new_info.subject = in_dict["subject"]
+#     new_info.pressure_values = [in_dict["value_1"]]
+#     new_info.save()
+#     new_info = SendData.objects.raw({"_id": in_dict["subject"]})
+#     new_info.update({"$push": {"pressure_values": in_dict["value_2"]}})
+#     new_info.update({"$push": {"pressure_values": in_dict["value_3"]}})
+#     new_info.update({"$push": {"pressure_values": in_dict["value_4"]}})
+#     new_info.update({"$push": {"pressure_values": in_dict["value_5"]}})
+#     new_info.update({"$push": {"pressure_values": in_dict["value_6"]}})
+#     new_info.update({"$push": {"pressure_values": in_dict["value_7"]}})
+#     new_info.update({"$push": {"pressure_values": in_dict["value_8"]}})
+#     new_info.update({"$push": {"pressure_values": in_dict["value_9"]}})
+#     new_info.update({"$push": {"pressure_values": in_dict["value_10"]}})
+#     new_info.update({"$push": {"pressure_values": in_dict["value_11"]}})
+#     new_info.update({"$push": {"pressure_values": in_dict["value_12"]}})
+#     new_info.update({"$push": {"pressure_values": in_dict["value_13"]}})
+#     new_info.update({"$push": {"pressure_values": in_dict["value_14"]}})
+#     new_info.update({"$push": {"pressure_values": in_dict["value_15"]}})
+
+
+# @app.route("/api/add_pressure", methods=["POST"])
+# def post_pressure_info():
+#     in_dict = request.get_json()
+#     add_pressure_data(in_dict)
+#     return "Good post made to server", 200
 
 
 if __name__ == '__main__':
