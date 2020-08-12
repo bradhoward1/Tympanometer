@@ -6,12 +6,23 @@ from pymodm import connect, MongoModel, fields, errors
 import PIL
 import matplotlib.pyplot as plt
 import csv
+from flask_mail import Mail, Message
 
 connect("mongodb+srv://<username>:<password>@cluster0-lucsp.mongodb.net"
         "/Tympanometer?retryWrites=true&w=majority")
 
 
 app = Flask(__name__)
+app.config.update(
+    DEBUG=True,
+    #EMAIL SETTINGS
+    MAIL_SERVER='smtp.gmail.com',
+    MAIL_PORT=465,
+    MAIL_USE_SSL=True,
+    MAIL_USERNAME = 'your@gmail.com',
+    MAIL_PASSWORD = 'yourpassword'
+    )
+mail = Mail(app)
 
 
 class SendData(MongoModel):
@@ -123,6 +134,10 @@ def create_csv(values, p_values):
         for value, p_value in zip(values, p_values):
             my_string = [str(value), str(p_value)]
             csvwriter.writerow(my_string)
+
+
+def create_email():
+    pass
 
 
 def add_pressure_data(in_dict):
