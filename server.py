@@ -7,6 +7,7 @@ import PIL
 import matplotlib.pyplot as plt
 import csv
 from flask_mail import Mail, Message
+import requests
 
 connect("mongodb+srv://<username>:<password>@cluster0-lucsp.mongodb.net"
         "/Tympanometer?retryWrites=true&w=majority")
@@ -15,12 +16,12 @@ connect("mongodb+srv://<username>:<password>@cluster0-lucsp.mongodb.net"
 app = Flask(__name__)
 app.config.update(
     DEBUG=True,
-    #EMAIL SETTINGS
+    # EMAIL SETTINGS
     MAIL_SERVER='smtp.gmail.com',
     MAIL_PORT=465,
     MAIL_USE_SSL=True,
-    MAIL_USERNAME = 'your@gmail.com',
-    MAIL_PASSWORD = 'yourpassword'
+    MAIL_USERNAME='your@gmail.com',
+    MAIL_PASSWORD='yourpassword'
     )
 mail = Mail(app)
 
@@ -136,8 +137,20 @@ def create_csv(values, p_values):
             csvwriter.writerow(my_string)
 
 
-def create_email():
-    pass
+def create_email(in_dict):
+    txt = "{} Data"
+    try:
+        msg = Message(txt.format(in_dict["subject"])
+                      sender="yoursendingemail@gmail.com",
+                      recipients=["recievingemail@email.com"])
+        msg.body = "Attached below are the"
+        " results for {}.".format(in_dict["subject"])
+        with app.open_resource("patient_info.csv") as fp:
+            msg.attach("patient_info.csv", "patient_info/csv", fp.read())
+        mail.send(msg)
+        return 'Mail sent!'
+    except Exception, e:
+        return(str(e))
 
 
 def add_pressure_data(in_dict):
