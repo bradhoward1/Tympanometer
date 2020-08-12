@@ -153,6 +153,12 @@ def create_email(in_dict):
         return(str(e))
 
 
+@app.route("/api/send_email", methods=["GET"])
+    in_dict = request.get_json()
+    return_message = create_email(in_dict)
+    return jsonify(return_message), 200
+
+
 def add_pressure_data(in_dict):
     new_info = SendData()
     keys = check_keys(in_dict)
