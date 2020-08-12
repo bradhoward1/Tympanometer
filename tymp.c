@@ -5,9 +5,10 @@ int SpeakerButton = D4;
 int soundPin = A0;
 int PressurePin = A1;
 int count = 0;
+int loop_count = 0;
 int overall_count = 0;
-double server_info[15];
-double pressure_info[15];
+double server_info[7];
+double pressure_info[7];
 const int sampleWindow = 50; // Sample window width in mS (50 mS = 20Hz)
 unsigned int sample;
 unsigned int PressureSample;
@@ -23,6 +24,8 @@ void setup() {
   pinMode(PumpButton, INPUT);
   pinMode(soundPin, INPUT);
   pinMode(PressurePin, INPUT);
+  Particle.connect();
+  tone(SpeakerPin, 226, 2000);
 }
 
 
@@ -32,105 +35,68 @@ void loop()
     Particle.connect();
   }
 //  PumpOutput();
-//  SpeakerOutput(); 
+//  SpeakerOutput();
   double data = micInput();
   double P_data = PressureInput();
   server_info[count] = data;
   pressure_info[count] = P_data;
 //  Serial.println(count);
-  if (count == 14){
+  if (count == 6){
     char payload[255];
     snprintf(payload, sizeof(payload)
-            , "{ \"s\":\"Values\""
-              ", \"v\": %f"
-              ", \"v\": %f"
-              ", \"v\": %f"
-              ", \"v\": %f"
-              ", \"v\": %f"
-              ", \"v\": %f"
-              ", \"v\": %f"
-              ", \"v\": %f"
-              ", \"v\": %f"
-              ", \"v\": %f"
-              ", \"v\": %f"
-              ", \"v\": %f"
-              ", \"v\": %f"
-              ", \"v\": %f"
-              ", \"v\": %f"
+            , "{ \"s\":\"Patient_9\""
+              ", \"v1\": %d"
+              ", \"v2\": %d"
+              ", \"v3\": %d"
+              ", \"v4\": %d"
+              ", \"v5\": %d"
+              ", \"v6\": %d"
+              ", \"v7\": %d"
+              ", \"v8\": %d"
+              ", \"v9\": %d"
+              ", \"v10\": %d"
+              ", \"v11\": %d"
+              ", \"v12\": %d"
+              ", \"v13\": %d"
+              ", \"v14\": %d"
               "}"
-            // , "Values"
-            , server_info[0]
-            , server_info[1]
-            , server_info[2]
-            , server_info[3]
-            , server_info[4]
-            , server_info[5]
-            , server_info[6]
-            , server_info[7]
-            , server_info[8]
-            , server_info[9]
-            , server_info[10]
-            , server_info[11]
-            , server_info[12]
-            , server_info[13]
-            , server_info[14]
+            , (int) server_info[0]
+            , (int) server_info[1]
+            , (int) server_info[2]
+            , (int) server_info[3]
+            , (int) server_info[4]
+            , (int) server_info[5]
+            , (int) server_info[6]
+            , (int) pressure_info[0]
+            , (int) pressure_info[1]
+            , (int) pressure_info[2]
+            , (int) pressure_info[3]
+            , (int) pressure_info[4]
+            , (int) pressure_info[5]
+            , (int) pressure_info[6]
             );
+    count = 0;
     Serial.println(payload);
     Particle.publish("SendToServer", payload, PRIVATE);
-    char payload_pressure[255];
-    snprintf(payload_pressure, sizeof(payload_pressure)
-            , "{ \"s\":\"Values\""
-              ", \"v\": %f"
-              ", \"v\": %f"
-              ", \"v\": %f"
-              ", \"v\": %f"
-              ", \"v\": %f"
-              ", \"v\": %f"
-              ", \"v\": %f"
-              ", \"v\": %f"
-              ", \"v\": %f"
-              ", \"v\": %f"
-              ", \"v\": %f"
-              ", \"v\": %f"
-              ", \"v\": %f"
-              ", \"v\": %f"
-              ", \"v\": %f"
-              "}"
-            // , "Values"
-            , pressure_info[0]
-            , pressure_info[1]
-            , pressure_info[2]
-            , pressure_info[3]
-            , pressure_info[4]
-            , pressure_info[5]
-            , pressure_info[6]
-            , pressure_info[7]
-            , pressure_info[8]
-            , pressure_info[9]
-            , pressure_info[10]
-            , pressure_info[11]
-            , pressure_info[12]
-            , pressure_info[13]
-            , pressure_info[14]
-            );
-    Serial.println(payload_pressure);
-    Particle.publish("SendPressure", payload_pressure, PRIVATE);
-    count = -1;
+    delay(100);
   }
   else {
       count += 1;
   }
   overall_count += 1;
-  if (overall_count >= 2000) {
-    get_mic_info("Values");
+  if (overall_count >= 300) {
+    delay(4000);
+    get_mic_info();
+    delay(4000);
+    send_email_out();
+    delay(1000);
     int stopper_variable = 1;
     while (stopper_variable == 1) {
-      delay(100);
-      
+      delay(100);     
     }
+  }
+} 
 
-  } 
-}
 
 
 int PumpOutput()
@@ -192,19 +158,31 @@ int micInput() {
 }
 
 
-int get_mic_info(String input_string) {
+int get_mic_info() {
   char payload[255];
   snprintf(payload, sizeof(payload)
-          , "{ \"s\": %s"
+          , "{ \"s\": Patient_9"
             "}"
-          , input_string
           );
   Serial.println(payload);
   Particle.publish("GetMicData", payload, PRIVATE);
 }
 
 
+int send_email_out() {
+  char payload[255];
+  snprintf(payload, sizeof(payload)
+          , "{ \"s\": Patient_9"
+            "}"
+          );
+  Serial.println(payload);
+  Partile.publish("SendEmail", payload, PRIVATE);
+}
+
+
 int PressureInput() {
+  double PressureOut = 0;
   PressureSample = analogRead(PressurePin);
-  return PressureSample;
+  PressureOut = PressureSample;
+  return PressureOut;
 }
