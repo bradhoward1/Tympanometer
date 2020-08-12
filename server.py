@@ -153,7 +153,7 @@ def create_email(in_dict):
         return(str(e))
 
 
-@app.route("/api/send_email", methods=["GET"])
+@app.route("/api/send_email", methods=["POST"])
     in_dict = request.get_json()
     return_message = create_email(in_dict)
     return jsonify(return_message), 200
