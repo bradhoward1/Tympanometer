@@ -140,17 +140,18 @@ def create_csv(values, p_values):
 def create_email(in_dict):
     txt = "{} Data"
     try:
-        msg = Message(txt.format(in_dict["subject"])
-                      sender="yoursendingemail@gmail.com",
-                      recipients=["recievingemail@email.com"])
-        msg.body = "Attached below are the"
-        " results for {}.".format(in_dict["subject"])
+        msg = Message(txt.format(in_dict["subject"]),
+                      sender="bradleyhoward98@gmail.com",
+                      recipients=["bradleyhoward98@gmail.com"])
+        msg.body = '''
+                   Attached below are the results for {}.
+                   '''.format(in_dict["subject"])
         with app.open_resource("patient_info.csv") as fp:
             msg.attach("patient_info.csv", "patient_info/csv", fp.read())
         mail.send(msg)
         return 'Mail sent!'
-    except Exception, e:
-        return(str(e))
+    except:
+        return "Something went wrong!"
 
 
 @app.route("/api/send_email", methods=["POST"])
