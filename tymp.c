@@ -44,7 +44,7 @@ void loop()
   if (count == 6){
     char payload[255];
     snprintf(payload, sizeof(payload)
-            , "{ \"s\":\"Patient_9\""
+            , "{ \"s\":\"Patient_11\""
               ", \"v1\": %d"
               ", \"v2\": %d"
               ", \"v3\": %d"
@@ -85,14 +85,14 @@ void loop()
   }
   overall_count += 1;
   if (overall_count >= 300) {
-    delay(4000);
+    delay(10000);
     get_mic_info();
     delay(4000);
     send_email_out();
     delay(1000);
     int stopper_variable = 1;
     while (stopper_variable == 1) {
-      delay(100);     
+      Particle.process();
     }
   }
 } 
@@ -161,28 +161,38 @@ int micInput() {
 int get_mic_info() {
   char payload[255];
   snprintf(payload, sizeof(payload)
-          , "{ \"s\": Patient_9"
+          , "{ \"s\": Patient_11"
             "}"
           );
   Serial.println(payload);
   Particle.publish("GetMicData", payload, PRIVATE);
+  return 1;
 }
 
 
 int send_email_out() {
   char payload[255];
   snprintf(payload, sizeof(payload)
-          , "{ \"s\": Patient_9"
+          , "{ \"s\": \"Patient_11\""
             "}"
           );
   Serial.println(payload);
-  Partile.publish("SendEmail", payload, PRIVATE);
+  Particle.publish("SendEmail", payload, PRIVATE);
+  return 1;
 }
 
 
 int PressureInput() {
   double PressureOut = 0;
+  double VoltageR = 0;
   PressureSample = analogRead(PressurePin);
-  PressureOut = PressureSample;
+  VoltageR = PressureSample;
+  VoltageR = VoltageR * (5 / 4096);
+  if (VoltageR <= 0.275){
+    PressureOut = 3755.3648 * (VoltageR) - 1211.0515;
+  }
+  else if (VoltageR >= 0.275) {
+    PressureOut = 85.6409 * (VoltageR) - 213.3421;
+  }
   return PressureOut;
 }
