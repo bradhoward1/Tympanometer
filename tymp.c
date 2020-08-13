@@ -78,7 +78,6 @@ void loop()
     count = 0;
     Serial.println(payload);
     Particle.publish("SendToServer", payload, PRIVATE);
-    delay(100);
   }
   else {
       count += 1;
