@@ -11,3 +11,4 @@ scipy
 pillow
 Flask-Mail
 pep8
+statistics
