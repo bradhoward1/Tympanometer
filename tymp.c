@@ -34,7 +34,7 @@ void loop()
   }
 //  PumpOutput();
 //  SpeakerOutput();
-  double data = analogRead(0);
+  double data = micInput();
   double P_data = PressureInput();
   server_info[count] = data;
   pressure_info[count] = P_data;
