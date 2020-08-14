@@ -24,8 +24,6 @@ void setup() {
   pinMode(PumpButton, INPUT);
   pinMode(soundPin, INPUT);
   pinMode(PressurePin, INPUT);
-  Particle.connect();
-  tone(SpeakerPin, 226, 2000);
 }
 
 
@@ -36,7 +34,7 @@ void loop()
   }
 //  PumpOutput();
 //  SpeakerOutput();
-  double data = micInput();
+  double data = analogRead(0);
   double P_data = PressureInput();
   server_info[count] = data;
   pressure_info[count] = P_data;
@@ -44,7 +42,7 @@ void loop()
   if (count == 6){
     char payload[255];
     snprintf(payload, sizeof(payload)
-            , "{ \"s\":\"Patient_11\""
+            , "{ \"s\":\"Patient_13\""
               ", \"v1\": %d"
               ", \"v2\": %d"
               ", \"v3\": %d"
@@ -82,6 +80,7 @@ void loop()
   else {
       count += 1;
   }
+  delay(100);
   overall_count += 1;
   if (overall_count >= 300) {
     delay(10000);
@@ -160,7 +159,7 @@ int micInput() {
 int get_mic_info() {
   char payload[255];
   snprintf(payload, sizeof(payload)
-          , "{ \"s\": Patient_11"
+          , "{ \"s\": Patient_13"
             "}"
           );
   Serial.println(payload);
@@ -172,7 +171,7 @@ int get_mic_info() {
 int send_email_out() {
   char payload[255];
   snprintf(payload, sizeof(payload)
-          , "{ \"s\": \"Patient_11\""
+          , "{ \"s\": \"Patient_13\""
             "}"
           );
   Serial.println(payload);
