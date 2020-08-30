@@ -30,6 +30,12 @@ void setup() {
   pinMode(PumpButton, INPUT);
   pinMode(soundPin, INPUT);
   pinMode(PressurePin, INPUT);
+  pinMode(stp, OUTPUT);
+  pinMode(dir, OUTPUT);
+  pinMode(MS1, OUTPUT);
+  pinMode(MS2, OUTPUT);
+  pinMode(EN, OUTPUT);
+  resetEDPins();
 }
 
 
@@ -199,4 +205,14 @@ int PressureInput() {
     PressureOut = 85.6409 * (VoltageR) - 213.3421;
   }
   return PressureOut;
+}
+
+
+void resetEDPins()
+{
+  digitalWrite(stp, LOW);
+  digitalWrite(dir, LOW);
+  digitalWrite(MS1, LOW);
+  digitalWrite(MS2, LOW);
+  digitalWrite(EN, HIGH);
 }
