@@ -1,3 +1,9 @@
+#define stp D6
+#define dir D7
+#define MS1 D5
+#define MS2 D1
+#define EN  RX
+
 int SpeakerPin = D0;
 int PumpButton = D3;
 int PumpPin = D2;
