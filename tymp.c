@@ -216,3 +216,19 @@ void resetEDPins()
   digitalWrite(MS2, LOW);
   digitalWrite(EN, HIGH);
 }
+
+
+void SmallStepMode()
+{
+  Serial.println("Stepping at 1/8th microstep mode.");
+  digitalWrite(dir, LOW); //Pull direction pin low to move "forward"
+  digitalWrite(MS1, HIGH); //Pull MS1, and MS2 high to set logic to 1/8th microstep resolution
+  digitalWrite(MS2, HIGH);
+  for(x= 0; x<1000; x++)  //Loop the forward stepping enough times for motion to be visible
+  {
+    digitalWrite(stp,HIGH); //Trigger one step forward
+    delay(1);
+    digitalWrite(stp,LOW); //Pull step pin low so it can be triggered again
+    delay(1);
+  }
+}
