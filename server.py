@@ -66,8 +66,8 @@ def add_vals(in_dict):
     new_info.update({"$push": {"values": in_dict["value_7"]}})
     new_info.update({"$push": {"values": in_dict["value_8"]}})
     new_info.update({"$push": {"values": in_dict["value_9"]}})
-    new_info.update({"$push": {"values": in_dict["value_10"]}})
-    new_info.update({"$push": {"values": in_dict["value_11"]}})
+    new_info.update({"$push": {"pressure_values": in_dict["value_10"]}})
+    new_info.update({"$push": {"pressure_values": in_dict["value_11"]}})
     new_info.update({"$push": {"pressure_values": in_dict["value_12"]}})
     new_info.update({"$push": {"pressure_values": in_dict["value_13"]}})
     new_info.update({"$push": {"pressure_values": in_dict["value_14"]}})
@@ -75,17 +75,13 @@ def add_vals(in_dict):
     new_info.update({"$push": {"pressure_values": in_dict["value_16"]}})
     new_info.update({"$push": {"pressure_values": in_dict["value_17"]}})
     new_info.update({"$push": {"pressure_values": in_dict["value_18"]}})
-    new_info.update({"$push": {"pressure_values": in_dict["value_19"]}})
-    new_info.update({"$push": {"pressure_values": in_dict["value_20"]}})
-    new_info.update({"$push": {"pressure_values": in_dict["value_21"]}})
-    new_info.update({"$push": {"pressure_values": in_dict["value_22"]}})
 
 
 def add_new_vals(in_dict):
     new_info = SendData()
     new_info.subject = in_dict["subject"]
     new_info.values = [in_dict["value_1"]]
-    new_info.pressure_values = [in_dict["value_12"]]
+    new_info.pressure_values = [in_dict["value_10"]]
     new_info.save()
     new_info = SendData.objects.raw({"_id": in_dict["subject"]})
     new_info.update({"$push": {"values": in_dict["value_2"]}})
@@ -96,18 +92,14 @@ def add_new_vals(in_dict):
     new_info.update({"$push": {"values": in_dict["value_7"]}})
     new_info.update({"$push": {"values": in_dict["value_8"]}})
     new_info.update({"$push": {"values": in_dict["value_9"]}})
-    new_info.update({"$push": {"values": in_dict["value_10"]}})
-    new_info.update({"$push": {"values": in_dict["value_11"]}})
+    new_info.update({"$push": {"pressure_values": in_dict["value_11"]}})
+    new_info.update({"$push": {"pressure_values": in_dict["value_12"]}})
     new_info.update({"$push": {"pressure_values": in_dict["value_13"]}})
     new_info.update({"$push": {"pressure_values": in_dict["value_14"]}})
     new_info.update({"$push": {"pressure_values": in_dict["value_15"]}})
     new_info.update({"$push": {"pressure_values": in_dict["value_16"]}})
     new_info.update({"$push": {"pressure_values": in_dict["value_17"]}})
     new_info.update({"$push": {"pressure_values": in_dict["value_18"]}})
-    new_info.update({"$push": {"pressure_values": in_dict["value_19"]}})
-    new_info.update({"$push": {"pressure_values": in_dict["value_20"]}})
-    new_info.update({"$push": {"pressure_values": in_dict["value_21"]}})
-    new_info.update({"$push": {"pressure_values": in_dict["value_22"]}})
 
 
 @app.route("/api/add_data", methods=["POST"])
